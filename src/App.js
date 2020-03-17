@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import convert from 'convert-units';
+import InputRow from './components/InputRow'
 import './App.css';
 
 function App() {
@@ -27,13 +28,33 @@ function App() {
     const [studentResponse, setStudentResponse] = React.useState(0);
 
     function getIsValid() {
-        let isValid =
+        let tempErrMsg = "";
+        const isApplesToApples =
             (Object.values(volumeUnits).includes(inputUnits) && Object.values(volumeUnits).includes(targetUnits))
             || (Object.values(tempUnits).includes(inputUnits) && Object.values(tempUnits).includes(targetUnits));
-        isValid &= !isNaN(inputValue);
-        isValid &= !isNaN(studentResponse)
+        tempErrMsg += (isApplesToApples ? "": "You cannot mix temperature and volume units. " );
+        const isNumberFromTeacher = !isNaN(inputValue);
+        tempErrMsg += (isNumberFromTeacher ? "": "Input is not a number. " );
+        const isNumberFromStudent = !isNaN(studentResponse);
+        tempErrMsg += (isNumberFromStudent ? "": "Student Input is not a number. " );
+        const isValid = isApplesToApples && isNumberFromStudent && isNumberFromStudent;
         console.log("isValid: " + isValid);
         return isValid;
+    }
+
+    function getErrMsg() {
+        let tempErrMsg = "";
+        const isApplesToApples =
+            (Object.values(volumeUnits).includes(inputUnits) && Object.values(volumeUnits).includes(targetUnits))
+            || (Object.values(tempUnits).includes(inputUnits) && Object.values(tempUnits).includes(targetUnits));
+        tempErrMsg += (isApplesToApples ? "": "You cannot mix temperature and volume units. " );
+        const isNumberFromTeacher = !isNaN(inputValue);
+        tempErrMsg += (isNumberFromTeacher ? "": "Input is not a number. " );
+        const isNumberFromStudent = !isNaN(studentResponse);
+        tempErrMsg += (isNumberFromStudent ? "": "Student Input is not a number. " );
+        const isValid = isApplesToApples && isNumberFromStudent && isNumberFromStudent;
+        console.log("tempErrMsg: " + tempErrMsg);
+        return tempErrMsg;
     }
 
     const getRightAnswer = () => {
@@ -69,7 +90,8 @@ function App() {
     const getResultDisplay = () => {
         if(getIsValid())
         {
-            if (getRightAnswer() == studentResponse) {
+            const roundedStudentResponse = Math.round(10 * studentResponse);
+            if (getRightAnswer() == roundedStudentResponse) {
                 return "CORRECT";
             }
             return "INCORRECT";
@@ -82,61 +104,18 @@ function App() {
 
     return (
         <div className="App">
-            <table>
+            <table className='border: 1px solid black;'>
                 <tbody>
                 <tr>
-                    <td>
-                        <label>
-                            Input:
-                            <br/>
-                            <input type="text" defaultValue={inputValue} onChange={(evt) => {
-                                setInputValue(evt.target.value)
-                            }
-                            }/>
-                        </label>
-                    </td>
-
-                    <td>
-                        <label>
-                            Input Units:
-                            <br/>
-                            <select value={inputUnits} onChange={(evt) => {
-                                setInputUnits(evt.target.value)
-                            }
-                            }>
-                                {unitSelectOptions()}
-                            </select>
-                        </label>
-                    </td>
-
-                    <td>
-                        <label>
-                            Target Units:
-                            <br/>
-                            <select value={targetUnits} onChange={(evt) => {
-                                setTargetUnits(evt.target.value)
-                            }
-                            }>
-                                {unitSelectOptions()}
-                            </select>
-                        </label>
-                    </td>
-
-                    <td>
-                        <label>
-                            Student Response:
-                            <br/>
-                            <input type="text" defaultValue={studentResponse} onChange={(evt) => {
-                                setStudentResponse(evt.target.value)
-                            }
-                            }/>
-                            <br/>
-                            {getRightAnswer()}
-                        </label>
-                    </td>
-                    <td>
-                        <b>{getResultDisplay()}</b>
-                    </td>
+                <InputRow defaultValue={inputValue} onChange={(evt) => {
+                    setInputValue(evt.target.value)
+                }} value={inputUnits} onChange1={(evt) => {
+                    setInputUnits(evt.target.value)
+                }} unitSelectOptions={unitSelectOptions()} value1={targetUnits} onChange2={(evt) => {
+                    setTargetUnits(evt.target.value)
+                }} defaultValue1={studentResponse} onChange3={(evt) => {
+                    setStudentResponse(evt.target.value)
+                }} rightAnswer={getRightAnswer()} resultDisplay={getResultDisplay()} errorMsg={getErrMsg()}/>
                 </tr>
                 </tbody>
             </table>
