@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Repo/CI/CD Pipeline
+GIT Repo: https://github.com/AntwoneDW/ventera-iqies-challenge
+Collaborador Added: /ventera-iqies-challenge
+AWS CI/CD Pipeline has been setup
+Result URL builds: 
+https://master.dw9v31v688wxw.amplifyapp.com/
+
+
 ## Available Scripts
 
 In the project directory, you can run:
