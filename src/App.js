@@ -49,7 +49,7 @@ function App() {
             || (Object.values(tempUnits).includes(inputUnits) && Object.values(tempUnits).includes(targetUnits));
         tempErrMsg += (isApplesToApples ? "": "You cannot mix temperature and volume units. " );
         const isNumberFromTeacher = !isNaN(inputValue);
-        tempErrMsg += (isNumberFromTeacher ? "": "Input is not a number. " );
+        tempErrMsg += (isNumberFromTeacher ? "": "Teacher Input is not a number. " );
         const isNumberFromStudent = !isNaN(studentResponse);
         tempErrMsg += (isNumberFromStudent ? "": "Student Input is not a number. " );
         const isValid = isApplesToApples && isNumberFromStudent && isNumberFromStudent;

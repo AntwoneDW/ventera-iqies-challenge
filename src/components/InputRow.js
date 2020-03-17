@@ -2,6 +2,11 @@ import React, {useState, useEffect} from 'react';
 import * as PropTypes from "prop-types";
 
 const InputRow = (props) => {
+
+    const divStyle = {
+        color: 'red'
+    };
+
     return (
         <table>
             <tbody>
@@ -56,7 +61,9 @@ const InputRow = (props) => {
             </tr>
             <tr>
                 <td colSpan={5}>
+                    <div style={divStyle}>
                     {props.errorMsg}
+                    </div>
                 </td>
             </tr>
             </tbody>
