@@ -1,26 +1,149 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import convert from 'convert-units';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const tempUnits = {
+        'Kelvin': 'K',
+        'Celsius': 'C',
+        'Fahrenheit': 'F',
+        'Rankine': 'R',
+    };
+
+    //liters, tablespoons, cubic-inches, cups, cubic-feet, and gallons
+    const volumeUnits = {
+        'Liters': 'l',
+        'Tablespoons': 'tsp',
+        'Cubic-inches': 'in3',
+        'Cups': 'cup',
+        'Cubic-feet': 'ft3',
+        'Gallons': 'gal',
+    };
+
+    const [inputValue, setInputValue] = React.useState(0);
+    const [inputUnits, setInputUnits] = React.useState(tempUnits[Object.keys(tempUnits)[0]]);
+    const [targetUnits, setTargetUnits] = React.useState(tempUnits[Object.keys(tempUnits)[0]]);
+    const [studentResponse, setStudentResponse] = React.useState(0);
+
+    function getIsValid() {
+        let isValid =
+            (Object.values(volumeUnits).includes(inputUnits) && Object.values(volumeUnits).includes(targetUnits))
+            || (Object.values(tempUnits).includes(inputUnits) && Object.values(tempUnits).includes(targetUnits));
+        isValid &= !isNaN(inputValue);
+        isValid &= !isNaN(studentResponse)
+        console.log("isValid: " + isValid);
+        return isValid;
+    }
+
+    const getRightAnswer = () => {
+        console.log("calculate everything ");
+        let isValid = getIsValid();
+        let result = "INVALID";
+        if (isValid) {
+            result = convert(inputValue).from(inputUnits).to(targetUnits);
+            result = Math.round(10 * result) / 10;
+            console.log("calculateEverything result: " + result);
+        }
+        return result;
+    }
+
+    const unitSelectOptions = () => {
+        const options = [];
+        Object.keys(tempUnits).forEach((niceName) => {
+            const optionKey = tempUnits[niceName];
+            options.push((<option key={optionKey} value={optionKey}>{niceName}</option>));
+        });
+        Object.keys(volumeUnits).forEach((niceName) => {
+            const optionKey = volumeUnits[niceName];
+            options.push((<option key={optionKey} value={optionKey}>{niceName}</option>));
+        })
+        ;
+
+
+        return (
+            options
+        );
+    };
+
+    const getResultDisplay = () => {
+        if(getIsValid())
+        {
+            if (getRightAnswer() == studentResponse) {
+                return "CORRECT";
+            }
+            return "INCORRECT";
+        }
+        else
+        {
+            return "INVALID";
+        }
+    }
+
+    return (
+        <div className="App">
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <label>
+                            Input:
+                            <br/>
+                            <input type="text" defaultValue={inputValue} onChange={(evt) => {
+                                setInputValue(evt.target.value)
+                            }
+                            }/>
+                        </label>
+                    </td>
+
+                    <td>
+                        <label>
+                            Input Units:
+                            <br/>
+                            <select value={inputUnits} onChange={(evt) => {
+                                setInputUnits(evt.target.value)
+                            }
+                            }>
+                                {unitSelectOptions()}
+                            </select>
+                        </label>
+                    </td>
+
+                    <td>
+                        <label>
+                            Target Units:
+                            <br/>
+                            <select value={targetUnits} onChange={(evt) => {
+                                setTargetUnits(evt.target.value)
+                            }
+                            }>
+                                {unitSelectOptions()}
+                            </select>
+                        </label>
+                    </td>
+
+                    <td>
+                        <label>
+                            Student Response:
+                            <br/>
+                            <input type="text" defaultValue={studentResponse} onChange={(evt) => {
+                                setStudentResponse(evt.target.value)
+                            }
+                            }/>
+                            <br/>
+                            {getRightAnswer()}
+                        </label>
+                    </td>
+                    <td>
+                        <b>{getResultDisplay()}</b>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    );
 }
 
 export default App;
