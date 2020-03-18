@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import convert from 'convert-units';
 import InputRow from './components/InputRow'
 import './App.css';
@@ -22,10 +22,10 @@ function App() {
         'Gallons': 'gal',
     };
 
-    const [inputValue, setInputValue] = React.useState(0);
-    const [inputUnits, setInputUnits] = React.useState(tempUnits[Object.keys(tempUnits)[0]]);
-    const [targetUnits, setTargetUnits] = React.useState(tempUnits[Object.keys(tempUnits)[0]]);
-    const [studentResponse, setStudentResponse] = React.useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [inputUnits, setInputUnits] = useState(tempUnits[Object.keys(tempUnits)[0]]);
+    const [targetUnits, setTargetUnits] = useState(tempUnits[Object.keys(tempUnits)[0]]);
+    const [studentResponse, setStudentResponse] = useState(0);
 
     function getIsValid() {
         let tempErrMsg = "";
@@ -38,7 +38,6 @@ function App() {
         const isNumberFromStudent = !isNaN(studentResponse);
         tempErrMsg += (isNumberFromStudent ? "": "Student Input is not a number. " );
         const isValid = isApplesToApples && isNumberFromStudent && isNumberFromStudent;
-        console.log("isValid: " + isValid);
         return isValid;
     }
 
@@ -53,18 +52,15 @@ function App() {
         const isNumberFromStudent = !isNaN(studentResponse);
         tempErrMsg += (isNumberFromStudent ? "": "Student Input is not a number. " );
         const isValid = isApplesToApples && isNumberFromStudent && isNumberFromStudent;
-        console.log("tempErrMsg: " + tempErrMsg);
         return tempErrMsg;
     }
 
     const getRightAnswer = () => {
-        console.log("calculate everything ");
         let isValid = getIsValid();
         let result = "INVALID";
         if (isValid) {
             result = convert(inputValue).from(inputUnits).to(targetUnits);
             result = Math.round(10 * result) / 10;
-            console.log("calculateEverything result: " + result);
         }
         return result;
     }
@@ -104,9 +100,6 @@ function App() {
 
     return (
         <div className="App">
-            <table className='border: 1px solid black;'>
-                <tbody>
-                <tr>
                 <InputRow defaultValue={inputValue} onChange={(evt) => {
                     setInputValue(evt.target.value)
                 }} value={inputUnits} onChange1={(evt) => {
@@ -116,11 +109,6 @@ function App() {
                 }} defaultValue1={studentResponse} onChange3={(evt) => {
                     setStudentResponse(evt.target.value)
                 }} rightAnswer={getRightAnswer()} resultDisplay={getResultDisplay()} errorMsg={getErrMsg()}/>
-                </tr>
-                </tbody>
-            </table>
-
-
         </div>
     );
 }

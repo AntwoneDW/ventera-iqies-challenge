@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import * as PropTypes from "prop-types";
 
 const InputRow = (props) => {
@@ -15,7 +15,7 @@ const InputRow = (props) => {
                     <label>
                         Teacher Input:
                         <br/>
-                        <input type="text" defaultValue={props.defaultValue} onChange={props.onChange
+                        <input aria-label="teachInput" type="text" defaultValue={props.defaultValue} onChange={props.onChange
                         }/>
                     </label>
                     <br/><br/>
@@ -49,14 +49,14 @@ const InputRow = (props) => {
                     <label>
                         Student Response:
                         <br/>
-                        <input type="text" defaultValue={props.defaultValue1} onChange={props.onChange3
+                        <input aria-label='student-input' type="text" defaultValue={props.defaultValue1} onChange={props.onChange3
                         }/>
                         <br/>
                         {props.rightAnswer}
                     </label>
                 </td>
                 <td>
-                    <b>{props.resultDisplay}</b>
+                    <div aria-label="result-display">{props.resultDisplay}</div>
                 </td>
             </tr>
             <tr>
