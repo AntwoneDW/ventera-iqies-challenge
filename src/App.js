@@ -62,6 +62,7 @@ function App() {
             result = convert(inputValue).from(inputUnits).to(targetUnits);
             result = Math.round(10 * result) / 10;
         }
+        console.log("getRightAnswer Returning: " + result );
         return result;
     }
 
@@ -76,8 +77,6 @@ function App() {
             options.push((<option key={optionKey} value={optionKey}>{niceName}</option>));
         })
         ;
-
-
         return (
             options
         );
@@ -86,8 +85,10 @@ function App() {
     const getResultDisplay = () => {
         if(getIsValid())
         {
-            const roundedStudentResponse = Math.round(10 * studentResponse);
-            if (getRightAnswer() == roundedStudentResponse) {
+            const roundedStudentResponse = Math.round(10 * studentResponse) / 10;
+            console.log("roundedStudentResponse: " + roundedStudentResponse );
+
+            if (getRightAnswer() === roundedStudentResponse) {
                 return "CORRECT";
             }
             return "INCORRECT";
